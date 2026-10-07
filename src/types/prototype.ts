@@ -1,40 +1,45 @@
 import type { Game } from "@/types/api";
 
-export type Prototype3BadgeKind = "new" | "top10" | "popular" | "demo" | "editorial";
+/**
+ * Presentation-layer contracts for the prototype mock catalog:
+ * game presentation metadata, lobby shelves/promos, and the bundled mock shape.
+ */
 
-export type Prototype3BadgeTone = "accent" | "success" | "warning" | "neutral";
+export type GameBadgeKind = "new" | "top10" | "popular" | "demo" | "editorial";
 
-export interface Prototype3GameBadge {
-  kind: Prototype3BadgeKind;
+export type GameBadgeTone = "accent" | "success" | "warning" | "neutral";
+
+export interface GameBadge {
+  kind: GameBadgeKind;
   label: string;
-  tone: Prototype3BadgeTone;
+  tone: GameBadgeTone;
   rank?: number;
   source: "catalog" | "mock-editorial";
 }
 
-export interface Prototype3GamePresentation {
+export interface GamePresentation {
   game_id: string;
   poster_url?: string;
   backdrop_url?: string;
   tagline?: string;
   synopsis?: string;
-  badges?: Prototype3GameBadge[];
+  badges?: GameBadge[];
   related_game_ids?: string[];
 }
 
-export type Prototype3ShelfType = "top10" | "demo" | "category" | "vendor" | "editorial";
+export type LobbyShelfType = "top10" | "demo" | "category" | "vendor" | "editorial";
 
-export interface Prototype3Shelf {
+export interface LobbyShelf {
   id: string;
   title: string;
   icon: string;
-  type: Prototype3ShelfType;
+  type: LobbyShelfType;
   category?: string;
   vendor_id?: string;
   limit: number;
 }
 
-export interface Prototype3Promo {
+export interface LobbyPromo {
   id: string;
   eyebrow: string;
   title: string;
@@ -45,7 +50,7 @@ export interface Prototype3Promo {
   image_url?: string;
 }
 
-export interface Prototype3FeatureConfig {
+export interface LobbyFeatureConfig {
   id: "spinner" | "lucky-pick";
   title: string;
   description: string;
@@ -54,7 +59,7 @@ export interface Prototype3FeatureConfig {
   enabled: boolean;
 }
 
-export interface Prototype3Theme {
+export interface LobbyTheme {
   name: string;
   background: string;
   surface: string;
@@ -62,25 +67,25 @@ export interface Prototype3Theme {
   accent_soft: string;
 }
 
-export interface Prototype3LobbyConfig {
+export interface LobbyConfig {
   hero_game_ids: string[];
-  shelves: Prototype3Shelf[];
-  promos: Prototype3Promo[];
+  shelves: LobbyShelf[];
+  promos: LobbyPromo[];
   features: {
-    spinner: Prototype3FeatureConfig;
-    lucky_pick: Prototype3FeatureConfig;
+    spinner: LobbyFeatureConfig;
+    lucky_pick: LobbyFeatureConfig;
   };
-  theme: Prototype3Theme;
+  theme: LobbyTheme;
 }
 
-export interface Prototype3MockData {
+export interface MockData {
   games: Game[];
-  presentations: Record<string, Prototype3GamePresentation>;
+  presentations: Record<string, GamePresentation>;
   vendors: Array<{
     id: string;
     name: string;
     status: string;
     enabled: boolean;
   }>;
-  lobby: Prototype3LobbyConfig;
+  lobby: LobbyConfig;
 }

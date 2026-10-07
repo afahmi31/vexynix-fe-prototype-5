@@ -10,6 +10,11 @@ import { markSessionExpired } from "@/lib/auth-redirect";
 import PortalHeader from "@/components/portal/PortalHeader";
 import PortalFooter from "@/components/portal/PortalFooter";
 import AuthModals from "@/components/auth/AuthModals";
+import VexynixHeader from "@/components/vexynix/VexynixHeader";
+import VexynixFooter from "@/components/vexynix/VexynixFooter";
+import GameDetailModal from "@/components/vexynix/GameDetailModal";
+import { useVexynixShell } from "@/stores/vexynix-shell";
+import "@/styles/vexynix.scss";
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
   const fetchBrand = useBrandStore((s) => s.fetchBrand);
@@ -18,12 +23,17 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
   const openLogin = useAuthModalStore((s) => s.openLogin);
   const pathname = usePathname();
 
+  // Vexynix surfaces run the prototype-5 shell in place of the portal chrome.
+  // The play route keeps the global header/footer; its main content adds the
+  // compact game identity and stage contract from handoff section 10.1.
+  const isVexynixRoute =
+    pathname === "/lobby" || pathname.startsWith("/games") || pathname.startsWith("/play");
+  const railOpen = useVexynixShell((s) => s.railOpen);
+  const closeRail = useVexynixShell((s) => s.closeRail);
+
   // Auth screens are full-bleed — they skip the 1400px centered shell so their
-  // background covers the whole viewport instead of leaving gutters. The lobby
-  // is full-bleed too so the Netflix billboard can run edge to edge.
+  // background covers the whole viewport instead of leaving gutters.
   const isAuthRoute = pathname === "/login" || pathname === "/register";
-  const isP4Lobby = pathname === "/lobby";
-  const isFlushRoute = isAuthRoute || pathname === "/lobby";
 
   useEffect(() => {
     hydrate();
@@ -47,10 +57,23 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
     });
   }, [clear, openLogin, pathname, isAuthRoute]);
 
+  if (isVexynixRoute) {
+    return (
+      <div className={`vx-page${railOpen ? " vx-drawer-open" : ""}`}>
+        <VexynixHeader />
+        <main>{children}</main>
+        <div className="vx-rail-scrim" onClick={closeRail} aria-hidden="true" />
+        <VexynixFooter />
+        <AuthModals />
+        <GameDetailModal />
+      </div>
+    );
+  }
+
   return (
-    <div className={`portal${isP4Lobby ? " p4-public-shell" : ""}`}>
+    <div className="portal">
       <PortalHeader />
-      <main className={isFlushRoute ? "portal-main portal-main-flush" : "portal-main"}>
+      <main className={isAuthRoute ? "portal-main portal-main-flush" : "portal-main"}>
         {children}
       </main>
       <PortalFooter />

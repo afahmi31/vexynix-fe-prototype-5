@@ -1,0 +1,124 @@
+// Vexynix design tokens — calibrated from the handoff visual direction (section 3.1).
+// All Vexynix styles are scoped under `.vx-page` / `.vx-` prefixes so they never
+// collide with the portal Bootstrap layer.
+
+.vx-page {
+  // Surfaces
+  --vx-bg: #061426;
+  --vx-bg-deep: #07111f;
+  --vx-surface: #0c1e35;
+  --vx-surface-elevated: #102641;
+  --vx-surface-soft: #132a45;
+
+  // Borders
+  --vx-border: rgba(148, 163, 184, 0.14);
+  --vx-border-strong: rgba(148, 163, 184, 0.24);
+  --vx-border-active: rgba(139, 92, 246, 0.72);
+
+  // Text
+  --vx-text: #f8fafc;
+  --vx-text-2: #b7c2d4;
+  --vx-text-3: #8795ac;
+
+  // Accents
+  --vx-purple: #8b5cf6;
+  --vx-purple-deep: #6d28d9;
+  --vx-magenta: #d946ef;
+  --vx-cyan: #22d3ee;
+  --vx-gold: #fbbf24;
+  --vx-green: #22c55e;
+  --vx-danger: #ff4d6d;
+
+  // Gradients
+  --vx-gradient-primary: linear-gradient(90deg, #7c3aed 0%, #a855f7 52%, #d946ef 100%);
+  --vx-gradient-gold: linear-gradient(135deg, #fde68a 0%, #fbbf24 46%, #f59e0b 100%);
+
+  // Radius scale (section 3.3)
+  --vx-radius-xs: 8px;
+  --vx-radius-sm: 10px;
+  --vx-radius-md: 12px;
+  --vx-radius-lg: 16px;
+  --vx-radius-xl: 20px;
+  --vx-radius-pill: 999px;
+
+  // Shadows / glow language (section 3.1)
+  --vx-shadow-card: 0 10px 24px rgba(3, 10, 22, 0.45);
+  --vx-shadow-card-hover: 0 14px 32px rgba(3, 10, 22, 0.55), 0 0 0 1px rgba(139, 92, 246, 0.55),
+    0 0 22px rgba(139, 92, 246, 0.28);
+  --vx-shadow-modal: 0 32px 80px rgba(2, 8, 20, 0.7), 0 0 60px rgba(124, 58, 237, 0.18);
+  --vx-shadow-cta: 0 6px 18px rgba(139, 92, 246, 0.38);
+
+  // Motion (section 12.1)
+  --vx-ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --vx-ease-inout: cubic-bezier(0.45, 0, 0.55, 1);
+  --vx-t-fast: 180ms;
+  --vx-t-med: 240ms;
+  --vx-t-slow: 300ms;
+
+  // Rhythm
+  --vx-gutter: 24px;
+  --vx-section-gap: 40px;
+  --vx-rail-w: 220px;
+  --vx-context-w: 300px;
+
+  font-family: var(--font-jakarta), "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
+  background: var(--vx-bg);
+  color: var(--vx-text);
+  min-height: 100vh;
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+}
+
+// Header / main / footer are direct children of .vx-page; main takes the slack
+// so the footer sits at the viewport bottom on short pages.
+.vx-page > main {
+  flex: 1;
+  width: 100%;
+
+  // Ambient page glow — quiet navy with a controlled violet leak (section 3.1).
+  background-image:
+    radial-gradient(900px 480px at 88% -8%, rgba(124, 58, 237, 0.16), transparent 62%),
+    radial-gradient(700px 420px at -6% 26%, rgba(34, 211, 238, 0.05), transparent 60%);
+  background-attachment: fixed;
+}
+
+.vx-page *,
+.vx-page *::before,
+.vx-page *::after {
+  box-sizing: border-box;
+}
+
+.vx-page a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.vx-page button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.vx-page img {
+  display: block;
+  max-width: 100%;
+}
+
+.vx-page ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vx-page *,
+  .vx-page *::before,
+  .vx-page *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

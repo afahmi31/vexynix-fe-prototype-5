@@ -1,0 +1,259 @@
+// Vexynix hero banner (section 6.3) + live wins rail (section 6.1 step 4).
+
+.vx-hero-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--vx-context-w);
+  gap: 20px;
+  align-items: stretch;
+}
+
+.vx-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--vx-radius-lg);
+  padding: 36px 40px;
+  min-height: 294px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid rgba(139, 92, 246, 0.28);
+  background:
+    radial-gradient(520px 300px at 82% 30%, rgba(217, 70, 239, 0.22), transparent 68%),
+    radial-gradient(420px 260px at 12% 88%, rgba(34, 211, 238, 0.1), transparent 66%),
+    linear-gradient(115deg, #2a1063 0%, #3b1a86 34%, #6d28d9 68%, #4c1d95 100%);
+
+  // Decorative artwork layer — existing banner-grade asset, blended behind copy.
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("/assets/mock/hero/vexynix-mascot-hero.png") right center / cover no-repeat;
+    opacity: 0.9;
+    mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.72) 42%, #000 100%);
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.72) 42%, #000 100%);
+  }
+
+  // Soft light beam, pure decoration.
+  &::after {
+    content: "";
+    position: absolute;
+    top: -60px;
+    right: 18%;
+    width: 240px;
+    height: 150%;
+    transform: rotate(24deg);
+    background: linear-gradient(180deg, rgba(248, 250, 252, 0.1), transparent 70%);
+    pointer-events: none;
+  }
+}
+
+.vx-hero-copy {
+  position: relative;
+  z-index: 1;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.vx-hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #e9d5ff;
+  padding: 6px 12px;
+  border-radius: var(--vx-radius-pill);
+  background: rgba(7, 17, 31, 0.35);
+  border: 1px solid rgba(233, 213, 255, 0.25);
+}
+
+.vx-hero-title {
+  margin: 0;
+  font-size: 50px;
+  line-height: 1.04;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  text-shadow: 0 6px 30px rgba(3, 10, 22, 0.45);
+
+  em {
+    font-style: normal;
+    display: block;
+    background: var(--vx-gradient-gold);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
+.vx-hero-sub {
+  margin: 0;
+  max-width: 430px;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: rgba(237, 233, 254, 0.85);
+}
+
+.vx-hero-ctas {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.vx-hero-stats {
+  position: relative;
+  z-index: 1;
+  margin-top: 26px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 26px;
+  padding: 12px 18px;
+  border-radius: var(--vx-radius-md);
+  background: rgba(7, 17, 31, 0.55);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  backdrop-filter: blur(6px);
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--vx-text-2);
+
+    i {
+      color: var(--vx-gold);
+      font-size: 14px;
+    }
+  }
+}
+
+// --- Live wins rail -------------------------------------------------------
+
+.vx-live {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--vx-radius-lg);
+  background: var(--vx-surface);
+  border: 1px solid var(--vx-border);
+  padding: 16px;
+  gap: 6px;
+}
+
+.vx-live-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 2px 4px 10px;
+
+  h3 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 800;
+  }
+}
+
+.vx-live-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--vx-green);
+  padding: 4px 10px;
+  border-radius: var(--vx-radius-pill);
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.28);
+
+  &::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--vx-green);
+    animation: vx-pulse 2s var(--vx-ease-inout) infinite;
+  }
+}
+
+@keyframes vx-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.55);
+  }
+  60% {
+    box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
+  }
+}
+
+.vx-live-row {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 9px 6px;
+  border-radius: var(--vx-radius-sm);
+  transition: background-color var(--vx-t-fast) var(--vx-ease-out);
+
+  &:hover {
+    background: var(--vx-surface-soft);
+  }
+}
+
+.vx-live-avatar {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #fff;
+  background: linear-gradient(135deg, var(--vx-purple-deep), var(--vx-magenta));
+
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    object-fit: cover;
+  }
+}
+
+.vx-live-meta {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+
+  strong {
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  span {
+    font-size: 11.5px;
+    color: var(--vx-text-3);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    b {
+      color: var(--vx-green);
+      font-weight: 700;
+    }
+  }
+}
+
+.vx-live-time {
+  flex-shrink: 0;
+  font-size: 11px;
+  color: var(--vx-text-3);
+}

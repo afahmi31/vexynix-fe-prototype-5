@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { MOCK_CATALOG } from "@/mocks/prototype-3";
+import { MOCK_CATALOG } from "@/mocks/prototype-mock";
 
 export async function POST(request: NextRequest) {
   let body: { game_id?: string; demo?: boolean };
@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
   const mode = body.demo === true ? "demo" : "real";
   return NextResponse.json({
     game_id: game.id,
-    launch_url: "/mock-game/" + encodeURIComponent(game.id) + "?mode=" + mode,
+    launch_url: "/play/" + encodeURIComponent(game.id) + "?mode=" + mode,
     demo: body.demo === true,
   });
 }

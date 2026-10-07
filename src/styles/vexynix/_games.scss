@@ -1,0 +1,525 @@
+// Vexynix search + chips (section 6.5), game grid/card (section 6.6),
+// and Top 10 ranking panel (section 6.7).
+
+.vx-search-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.vx-search-field {
+  flex-shrink: 0;
+  width: 280px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 42px;
+  padding: 0 16px;
+  border-radius: var(--vx-radius-pill);
+  background: var(--vx-surface);
+  border: 1px solid var(--vx-border);
+  color: var(--vx-text-3);
+
+  input {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    background: none;
+    outline: none;
+    font: inherit;
+    font-size: 13px;
+    color: var(--vx-text);
+
+    &::placeholder {
+      color: var(--vx-text-3);
+    }
+  }
+
+  .vx-search-submit {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--vx-text-2);
+    background: rgba(139, 92, 246, 0.14);
+    transition:
+      color var(--vx-t-fast) var(--vx-ease-out),
+      background-color var(--vx-t-fast) var(--vx-ease-out),
+      transform var(--vx-t-fast) var(--vx-ease-out);
+
+    &:hover {
+      color: #fff;
+      background: var(--vx-purple);
+      transform: translateX(2px);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--vx-border-active);
+      outline-offset: 2px;
+    }
+  }
+
+  &:focus-within {
+    border-color: var(--vx-border-active);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.16);
+  }
+}
+
+.vx-chip-next {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: var(--vx-text-2);
+  background: var(--vx-surface);
+  border: 1px solid var(--vx-border);
+  transition:
+    color var(--vx-t-fast) var(--vx-ease-out),
+    border-color var(--vx-t-fast) var(--vx-ease-out),
+    transform var(--vx-t-fast) var(--vx-ease-out);
+
+  &:hover {
+    color: #fff;
+    border-color: var(--vx-border-active);
+    transform: translateX(2px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--vx-border-active);
+    outline-offset: 2px;
+  }
+}
+
+.vx-chips {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-right: 8px;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.vx-chip {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 38px;
+  padding: 0 15px;
+  border-radius: var(--vx-radius-pill);
+  background: var(--vx-surface);
+  border: 1px solid var(--vx-border);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--vx-text-2);
+  transition:
+    color var(--vx-t-fast) var(--vx-ease-out),
+    border-color var(--vx-t-fast) var(--vx-ease-out),
+    background-color var(--vx-t-fast) var(--vx-ease-out),
+    transform var(--vx-t-fast) var(--vx-ease-out);
+
+  i {
+    font-size: 12px;
+    color: var(--vx-text-3);
+    transition: color var(--vx-t-fast) var(--vx-ease-out);
+  }
+
+  &:hover {
+    color: var(--vx-text);
+    border-color: var(--vx-border-strong);
+    transform: translateY(-1px);
+
+    i {
+      color: var(--vx-text-2);
+    }
+  }
+
+  &.is-active {
+    color: #fff;
+    background: linear-gradient(90deg, rgba(124, 58, 237, 0.85), rgba(168, 85, 247, 0.6));
+    border-color: rgba(217, 70, 239, 0.4);
+
+    i {
+      color: #f5d0fe;
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--vx-border-active);
+    outline-offset: 2px;
+  }
+}
+
+// --- Game grid + card ------------------------------------------------------
+
+.vx-game-grid {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.vx-game-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  border-radius: var(--vx-radius-md);
+  transition: transform var(--vx-t-med) var(--vx-ease-out);
+
+  // Hover/focus lift is preview-only — never shifts grid geometry (section 8.1).
+  &:hover,
+  &:focus-within {
+    transform: translateY(-4px);
+  }
+
+  &:focus-visible {
+    outline: none;
+  }
+
+  &:focus-visible .vx-game-thumb {
+    outline: 2px solid var(--vx-border-active);
+    outline-offset: 2px;
+  }
+}
+
+.vx-game-thumb {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--vx-radius-md);
+  overflow: hidden;
+  background: var(--vx-surface-soft);
+  border: 1px solid var(--vx-border);
+  transition:
+    border-color var(--vx-t-med) var(--vx-ease-out),
+    box-shadow var(--vx-t-med) var(--vx-ease-out);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--vx-t-slow) var(--vx-ease-out);
+  }
+
+  .vx-game-card:hover &,
+  .vx-game-card:focus-within & {
+    border-color: var(--vx-border-active);
+    box-shadow:
+      0 0 0 1px rgba(139, 92, 246, 0.55),
+      0 10px 26px rgba(3, 10, 22, 0.55),
+      0 0 22px rgba(139, 92, 246, 0.24);
+
+    img {
+      transform: scale(1.06);
+    }
+  }
+}
+
+.vx-game-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 1;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  padding: 3px 8px;
+  border-radius: 6px;
+  color: #fff;
+
+  &--new {
+    background: linear-gradient(120deg, #ec4899, #d946ef);
+    box-shadow: 0 4px 12px rgba(217, 70, 239, 0.4);
+  }
+
+  &--top {
+    background: linear-gradient(120deg, #f59e0b, #fbbf24);
+    color: #231a05;
+  }
+}
+
+.vx-game-title {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.vx-game-provider {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--vx-text-3);
+  white-space: nowrap;
+  overflow: hidden;
+
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.vx-game-plays {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--vx-text-3);
+
+  i {
+    font-size: 10px;
+    color: var(--vx-text-3);
+  }
+}
+
+// --- Card hover overlay (handoff section 8) ---------------------------------
+// Preview-only state: never shifts grid geometry. The overlay matches the
+// thumb box via aspect-ratio so it dims the artwork, not the text block.
+
+.vx-game-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--vx-radius-md);
+  background: rgba(11, 15, 28, 0.78);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  z-index: 1;
+  transition:
+    opacity 200ms var(--vx-ease-out),
+    transform 240ms var(--vx-ease-out);
+}
+
+.vx-game-card:hover .vx-game-overlay,
+.vx-game-card:focus-within .vx-game-overlay {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.vx-game-card:hover {
+  transform: translateY(-4px) scale(1.01);
+}
+
+.vx-overlay-btn {
+  width: 78%;
+  height: 34px;
+  border-radius: var(--vx-radius-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 700;
+  transition:
+    filter var(--vx-t-fast) var(--vx-ease-out),
+    border-color var(--vx-t-fast) var(--vx-ease-out),
+    transform var(--vx-t-fast) var(--vx-ease-out);
+
+  &:active {
+    transform: scale(0.97);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--vx-border-active);
+    outline-offset: 2px;
+  }
+}
+
+.vx-overlay-btn--primary {
+  color: #fff;
+  background: linear-gradient(120deg, #a855f7, #7c3aed);
+  box-shadow: 0 4px 14px rgba(139, 92, 246, 0.5);
+
+  &:hover {
+    filter: brightness(1.12);
+  }
+}
+
+.vx-overlay-btn--ghost {
+  height: 30px;
+  color: #cbd5f0;
+  background: rgba(139, 92, 246, 0.12);
+  border: 1px solid rgba(168, 85, 247, 0.55);
+  font-weight: 600;
+
+  &:hover {
+    border-color: rgba(168, 85, 247, 0.9);
+    color: #fff;
+  }
+}
+
+.vx-game-title-btn {
+  display: block;
+  width: 100%;
+  padding: 0;
+  text-align: left;
+}
+
+.vx-top10 {
+  border-radius: var(--vx-radius-lg);
+  background: var(--vx-surface);
+  border: 1px solid var(--vx-border);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.vx-top10-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 2px 4px 12px;
+
+  h3 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 800;
+  }
+}
+
+.vx-top10-row {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  text-align: left;
+  padding: 8px 6px;
+  border-radius: var(--vx-radius-sm);
+  transition: background-color var(--vx-t-fast) var(--vx-ease-out);
+
+  &:hover {
+    background: var(--vx-surface-soft);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--vx-border-active);
+    outline-offset: -2px;
+  }
+}
+
+.vx-top10-rank {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 800;
+  background: rgba(148, 163, 184, 0.14);
+  color: var(--vx-text-2);
+
+  &--1 {
+    background: linear-gradient(135deg, #fde68a, #f59e0b);
+    color: #231a05;
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
+  }
+
+  &--2 {
+    background: linear-gradient(135deg, #e2e8f0, #94a3b8);
+    color: #10192e;
+  }
+
+  &--3 {
+    background: linear-gradient(135deg, #fdba74, #c2703d);
+    color: #2a1505;
+  }
+}
+
+.vx-top10-thumb {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: var(--vx-radius-xs);
+  overflow: hidden;
+  border: 1px solid var(--vx-border);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.vx-top10-meta {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+
+  strong {
+    font-size: 12.5px;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  span {
+    font-size: 11px;
+    color: var(--vx-text-3);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.vx-top10-score {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11.5px;
+  font-weight: 700;
+
+  i {
+    font-size: 10px;
+  }
+
+  &--fire {
+    color: var(--vx-danger);
+
+    i {
+      color: var(--vx-danger);
+    }
+  }
+
+  &--up {
+    color: var(--vx-green);
+
+    i {
+      color: var(--vx-green);
+    }
+  }
+}
+
+.vx-top10 .vx-btn {
+  margin-top: 12px;
+  width: 100%;
+}

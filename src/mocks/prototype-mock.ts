@@ -1,10 +1,15 @@
+/**
+ * Shared mock catalog for the prototype. This is the single source of truth
+ * for games, vendors, presentation metadata, and lobby configuration; keep
+ * every change additive and backward-compatible.
+ */
 import type { Game, Vendor } from "@/types/api";
 import type {
-  Prototype3GameBadge,
-  Prototype3GamePresentation,
-  Prototype3LobbyConfig,
-  Prototype3MockData,
-} from "@/types/prototype-3";
+  GameBadge,
+  GamePresentation,
+  LobbyConfig,
+  MockData,
+} from "@/types/prototype";
 
 interface GameSeed {
   id: string;
@@ -1099,6 +1104,31 @@ function descriptionFor(seed: GameSeed): string {
   );
 }
 
+/**
+ * Deterministic volatility assignment (handoff section 15.2 additive metadata).
+ * Derived from a stable character hash of the id so every screen reads the
+ * same value without a hand-maintained 106-row table. Live tables read low,
+ * table games low/medium, everything else cycles low/medium/high.
+ */
+function volatilityFor(seed: GameSeed): "low" | "medium" | "high" {
+  if (seed.category === "live") return "low";
+  if (seed.category === "table") return seed.id.length % 2 === 0 ? "low" : "medium";
+  const levels = ["low", "medium", "high"] as const;
+  const hash = [...seed.id].reduce((sum, ch) => sum + ch.charCodeAt(0), 0);
+  return levels[hash % 3] ?? "medium";
+}
+
+/** Deterministic max-win multiplier tiers per category (section 15.2). */
+function maxWinFor(seed: GameSeed): number {
+  const hash = [...seed.id].reduce((sum, ch) => sum + ch.charCodeAt(0), 0);
+  const slotTiers = [5000, 10000, 12500, 15000, 21000];
+  const arcadeTiers = [1000, 2000, 5000];
+  const lowTiers = [250, 500, 1000];
+  const tiers =
+    seed.category === "slot" ? slotTiers : seed.category === "arcade" ? arcadeTiers : lowTiers;
+  return tiers[hash % tiers.length] ?? 1000;
+}
+
 function createGame(seed: GameSeed): Game {
   const isLive = seed.category === "live";
   return {
@@ -1117,6 +1147,8 @@ function createGame(seed: GameSeed): Game {
     is_popular: seed.is_popular ?? false,
     is_featured: seed.is_featured ?? false,
     demo_supported: seed.demo_supported ?? !isLive,
+    volatility: volatilityFor(seed),
+    maxWin: maxWinFor(seed),
   };
 }
 
@@ -1129,7 +1161,7 @@ export const MOCK_VENDORS: Vendor[] = Object.entries(VENDOR_NAMES).map(([id, nam
   enabled: true,
 }));
 
-export const MOCK_P3_TOP10_RANKS: Record<string, number> = {
+export const MOCK_TOP10_RANKS: Record<string, number> = {
   "solar-riches": 1,
   "neon-racer": 2,
   "deep-sea-odyssey": 3,
@@ -1142,7 +1174,46 @@ export const MOCK_P3_TOP10_RANKS: Record<string, number> = {
   "velvet-roulette": 10,
 };
 
-const HERO_ART: Record<string, Pick<Prototype3GamePresentation, "backdrop_url" | "tagline">> = {
+/**
+ * Additive presentation metadata (handoff section 15.2): lifetime play counts
+ * used by card footers, ranking momentum, and section ordering. Lifetime
+ * popularity is a different metric from the weekly Top 10 ranks above, so the
+ * values are allowed to disagree with MOCK_TOP10_RANKS.
+ */
+export const MOCK_POPULARITY: Record<string, number> = {
+  "gates-of-olympus": 98200,
+  "sweet-bonanza": 76400,
+  "starlight-princess": 64800,
+  "sugar-rush": 51200,
+  "mahjong-ways-2": 44100,
+  "wanted-dead-or-a-wild": 38600,
+  "solar-riches": 31900,
+  "deep-sea-odyssey": 26400,
+  "neon-racer": 22100,
+  "velvet-roulette": 18300,
+  "wrath-of-zeus": 15600,
+  "lucky-fortune-cat": 13800,
+  "fortune-mouse": 12100,
+  "treasure-fortune": 10600,
+  "mystic-potions": 9400,
+  "candy-superwin": 8300,
+  "dragon-tiger-luck": 7200,
+  "mahjong-wins": 6500,
+  "five-lions": 5800,
+  "fire-hot-100": 5100,
+  "phoenix-rises": 4800,
+  "shaolin-soccer": 4300,
+  "diner-frenzy": 3900,
+  "mahjong-wins-2": 3400,
+  "butterfly-lovers": 3100,
+  "wild-west": 2700,
+  "american-baccarat": 2300,
+  "slot-777": 1900,
+  "wild-fish-hunter": 1700,
+  "tnt-fiesta": 1500,
+};
+
+const HERO_ART: Record<string, Pick<GamePresentation, "backdrop_url" | "tagline">> = {
   "solar-riches": {
     backdrop_url: "/assets/mock/hero/solar-riches-backdrop.png",
     tagline: "Temukan cahaya keberuntungan di balik kuil emas.",
@@ -1161,9 +1232,9 @@ const HERO_ART: Record<string, Pick<Prototype3GamePresentation, "backdrop_url" |
   },
 };
 
-function badgeList(game: Game): Prototype3GameBadge[] {
-  const badges: Prototype3GameBadge[] = [];
-  const rank = MOCK_P3_TOP10_RANKS[game.id];
+function badgeList(game: Game): GameBadge[] {
+  const badges: GameBadge[] = [];
+  const rank = MOCK_TOP10_RANKS[game.id];
 
   if (rank) {
     badges.push({
@@ -1210,8 +1281,8 @@ function badgeList(game: Game): Prototype3GameBadge[] {
   return badges;
 }
 
-export const MOCK_P3_PRESENTATIONS: Record<string, Prototype3GamePresentation> =
-  MOCK_CATALOG.reduce<Record<string, Prototype3GamePresentation>>((presentations, game) => {
+export const MOCK_PRESENTATIONS: Record<string, GamePresentation> =
+  MOCK_CATALOG.reduce<Record<string, GamePresentation>>((presentations, game) => {
     const heroArt = HERO_ART[game.id];
     presentations[game.id] = {
       game_id: game.id,
@@ -1229,7 +1300,7 @@ export const MOCK_P3_PRESENTATIONS: Record<string, Prototype3GamePresentation> =
     return presentations;
   }, {});
 
-export const MOCK_P3_LOBBY: Prototype3LobbyConfig = {
+export const MOCK_LOBBY_CONFIG: LobbyConfig = {
   hero_game_ids: ["solar-riches", "neon-racer", "velvet-roulette", "deep-sea-odyssey"],
   shelves: [
     {
@@ -1354,9 +1425,9 @@ export const MOCK_P3_LOBBY: Prototype3LobbyConfig = {
   },
 };
 
-export const MOCK_P3_DATA: Prototype3MockData = {
+export const MOCK_DATA: MockData = {
   games: MOCK_CATALOG,
-  presentations: MOCK_P3_PRESENTATIONS,
+  presentations: MOCK_PRESENTATIONS,
   vendors: MOCK_VENDORS,
-  lobby: MOCK_P3_LOBBY,
+  lobby: MOCK_LOBBY_CONFIG,
 };

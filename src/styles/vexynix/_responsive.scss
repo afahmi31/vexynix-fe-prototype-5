@@ -1,0 +1,223 @@
+// Vexynix responsive reflow (handoff sections 4 and 17.1).
+// Breakpoints follow composition changes, not device names (section 4.1).
+
+// --- Desktop / laptop: 1200–1439 -------------------------------------------
+@media (max-width: 1439px) {
+  .vx-page {
+    --vx-rail-w: 200px;
+    --vx-context-w: 280px;
+    --vx-gutter: 20px;
+  }
+
+  .vx-hero-title {
+    font-size: 44px;
+  }
+
+  .vx-game-grid {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+}
+
+// --- Tablet landscape: 900–1199 --------------------------------------------
+@media (max-width: 1199px) {
+  // Left rail collapses into a drawer; content goes full width (section 17.1).
+  .vx-body {
+    padding-top: 14px;
+  }
+
+  .vx-rail {
+    position: fixed;
+    z-index: 90;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: min(300px, 84vw);
+    max-height: none;
+    background: var(--vx-bg-deep);
+    border-right: 1px solid var(--vx-border);
+    padding: 18px 14px;
+    transform: translateX(-102%);
+    transition: transform 300ms var(--vx-ease-out);
+    overflow-y: auto;
+  }
+
+  .vx-page.vx-drawer-open .vx-rail {
+    transform: translateX(0);
+    box-shadow: 24px 0 60px rgba(2, 8, 20, 0.6);
+  }
+
+  .vx-rail-scrim {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    background: rgba(3, 10, 22, 0.6);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 280ms var(--vx-ease-out);
+  }
+
+  .vx-page.vx-drawer-open .vx-rail-scrim {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .vx-icon-btn {
+    display: inline-flex;
+  }
+
+  .vx-header-search-trigger {
+    display: none;
+  }
+
+  .vx-header-nav {
+    display: none;
+  }
+
+  .vx-hero-row,
+  .vx-duo {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .vx-duo-rail {
+    position: static;
+  }
+
+  .vx-game-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .vx-promo-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+// --- Tablet portrait: 768–899 ----------------------------------------------
+@media (max-width: 899px) {
+  .vx-header-search {
+    display: none;
+  }
+
+  .vx-header-search-trigger {
+    display: inline-flex;
+  }
+
+  .vx-hero {
+    padding: 28px 24px;
+    min-height: 0;
+  }
+
+  .vx-hero-title {
+    font-size: 38px;
+  }
+
+  .vx-game-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .vx-cat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .vx-footer-top {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .vx-footer-aside {
+    align-items: flex-start;
+  }
+
+  .vx-pays {
+    justify-content: flex-start;
+  }
+}
+
+// --- Mobile large: 430–767 ---------------------------------------------------
+@media (max-width: 767px) {
+  .vx-page {
+    --vx-section-gap: 30px;
+  }
+
+  .vx-header-actions .vx-btn--ghost {
+    display: none; // Log In stays reachable from the drawer + Sign Up remains.
+  }
+
+  .vx-search-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .vx-search-field {
+    width: 100%;
+  }
+
+  .vx-game-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .vx-promo-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .vx-promo {
+    min-height: 0;
+    padding: 16px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    img {
+      position: static;
+      width: 84px;
+      height: 84px;
+    }
+  }
+
+  .vx-promo .vx-btn {
+    margin-top: 8px;
+  }
+
+  .vx-hero-ctas {
+    flex-wrap: wrap;
+  }
+}
+
+// --- Mobile standard: 360–429 ------------------------------------------------
+@media (max-width: 429px) {
+  .vx-hero-title {
+    font-size: 32px;
+  }
+
+  .vx-game-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .vx-footer-top {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .vx-footer-bottom {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+// --- Touch targets: 44px minimum on coarse pointers (handoff section 18) ------
+@media (pointer: coarse) {
+  .vx-page .vx-chip,
+  .vx-page-btn,
+  .vx-rail-item,
+  .vx-check {
+    min-height: 44px;
+  }
+
+  .vx-page-btn {
+    min-width: 44px;
+  }
+
+  .vx-view-toggle button,
+  .vx-filters-btn {
+    height: 44px;
+  }
+}

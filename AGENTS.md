@@ -4,6 +4,28 @@ Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-s
 
 **Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
 
+## 0. Prototype-5 Design Sources (MANDATORY READ)
+
+Before writing any UI code for this prototype, read — in this order:
+
+1. **`docs/vexynix-vibe-code-design-audit-handoff-v2.md`** — the authoritative design audit & implementation contract for the Vexynix UI: visual direction (tokens, typography, spacing), responsive contract, page structure per screen, component inventory, motion timing, data integrity rules, and UAT checklist. If existing code and this document disagree, the document wins.
+2. **`docs/design-ref/`** — the visual references for the desktop 1440 px composition baseline. Open the image for the screen you are building and match composition, proportion, and spacing from the actual image — not from memory:
+   - `lobby-design.png` — Lobby / Homepage
+   - `explore-game-design.png` — Game Category / Provider / Game List / Filter
+   - `game-card-hover.png` — Game Card hover state
+   - `game-card-preview.png` — Game Card click / Game Detail modal
+   - `game-play-demo.png` — Game Play / Try Demo
+
+Key contracts from the handoff (full details in the document itself):
+
+- Desktop 1440 px is the source of truth for composition; tablet/mobile are intentional adaptations with no content loss (§4, §17).
+- Existing mock data is the catalog source of truth (`src/mocks/prototype-mock.ts`, assets in `public/assets/mock/`). Never invent, duplicate, or auto-generate games/providers to fill a layout; every count (totals, category counts, result counts, pagination) must derive from actual data (§15).
+- Mock data extension is additive and backward-compatible only: new optional fields on existing games, no renames, no removed fields, no changed identities (§15.2).
+- Generated images only fill genuinely missing assets (hero art, icons, ornaments); they never create new catalog entries (§15.3).
+- User-facing copy must read like a real product — no internal/dev terms ("mock", "placeholder", "generated", "TODO", "awaiting backend") in UI text (§14).
+- Follow the motion timing table (§12.1) and accessibility minimums (§18); respect `prefers-reduced-motion`.
+- Before declaring done, run the UAT checklist (§19) and the visual regression pass against the reference images (§20).
+
 ## 1. Think Before Coding
 
 **Don't assume. Don't hide confusion. Surface tradeoffs.**
@@ -139,5 +161,5 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 ## Context
 
 - Language: TypeScript / JavaScript (Next.js 15, React 19)
-- Project: game-web-client-facing
+- Project: game-web-client-facing — prototype-5 (Vexynix dark gaming UI per `docs/vexynix-vibe-code-design-audit-handoff-v2.md`)
 - Generated: 2026-08-29

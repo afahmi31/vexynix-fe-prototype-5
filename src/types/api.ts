@@ -215,6 +215,10 @@ export interface Game {
    */
   demo_supported?: boolean;
   is_new?: boolean;
+  /** Presentation metadata (prototype handoff section 15.2): low | medium | high. */
+  volatility?: "low" | "medium" | "high";
+  /** Presentation metadata (prototype handoff section 15.2): max win multiplier (e.g. 5000 = 5,000x). */
+  maxWin?: number;
 }
 
 export interface CatalogRes {

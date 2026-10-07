@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useBrandStore } from "@/stores/brand";
@@ -8,7 +8,6 @@ import { useSessionStore } from "@/stores/session";
 import { authApi } from "@/lib/api/auth";
 import { useAuthModalStore } from "@/stores/auth-modal";
 import PortalBalancePill from "./PortalBalancePill";
-import P4Header from "./P4Header";
 
 const NAV_LINKS = [
   { href: "/lobby", label: "Game", icon: "fa-solid fa-dice" },
@@ -32,24 +31,10 @@ export default function PortalHeader() {
 
   const isLoggedIn = !!token;
 
-  // The lobby keeps a compact solid header above the floating hero.
-  const isLobby = pathname === "/lobby";
-  const showNav = isLoggedIn && !isLobby;
+  // The lobby renders the Vexynix shell from the public layout and never
+  // reaches this header; this component serves the remaining public routes.
+  const showNav = isLoggedIn;
   const isVexynix = brand.label.trim().toUpperCase() === "VEXYNIX";
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    if (!isLobby) {
-      setScrolled(false);
-      return;
-    }
-    const onScroll = () => setScrolled(window.scrollY > 64);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [isLobby]);
-
-  if (isLobby) return <P4Header />;
 
   // On the deposit page itself the shortcut links to the route we're already on,
   // so it does nothing visible — the page keeps its state. "Deposit Baru" on the
@@ -68,11 +53,7 @@ export default function PortalHeader() {
   };
 
   return (
-    <header
-      className={`portal-header ${isLobby ? "portal-header--lobby" : ""} ${
-        isLobby && scrolled ? "is-scrolled" : ""
-      }`.trim()}
-    >
+    <header className="portal-header">
       <div className="portal-header-inner">
         {/* Brand */}
         <Link

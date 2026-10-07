@@ -1,0 +1,338 @@
+// Vexynix promo tiles (section 6.4), category feature tiles (section 6.8),
+// and provider logo tiles (section 6.9).
+
+.vx-promo-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.vx-promo {
+  position: relative;
+  overflow: hidden;
+  min-height: 168px;
+  border-radius: var(--vx-radius-lg);
+  border: 1px solid var(--vx-border);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform var(--vx-t-med) var(--vx-ease-out), box-shadow var(--vx-t-med) var(--vx-ease-out),
+    border-color var(--vx-t-med) var(--vx-ease-out);
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--vx-shadow-card-hover);
+    border-color: var(--vx-border-active);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--vx-border-active);
+    outline-offset: 2px;
+  }
+
+  img {
+    position: absolute;
+    right: -12px;
+    bottom: -14px;
+    width: 108px;
+    height: 108px;
+    object-fit: contain;
+    filter: drop-shadow(0 10px 18px rgba(3, 10, 22, 0.5));
+    transform: rotate(-4deg);
+    transition: transform var(--vx-t-slow) var(--vx-ease-out);
+  }
+
+  &:hover img {
+    transform: rotate(-2deg) translateY(-4px) scale(1.05);
+  }
+}
+
+.vx-promo-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.vx-promo-title {
+  margin: 6px 0 0;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.vx-promo-value {
+  margin: 3px 0 0;
+  font-size: 12.5px;
+  color: var(--vx-text-2);
+}
+
+.vx-promo .vx-btn {
+  position: relative;
+  z-index: 1;
+  align-self: flex-start;
+  height: 34px;
+  padding: 0 14px;
+  font-size: 12.5px;
+  margin-top: 12px;
+}
+
+// Per-tile themes
+.vx-promo--green {
+  background: linear-gradient(150deg, rgba(34, 197, 94, 0.28), rgba(12, 30, 53, 0.96) 72%);
+}
+
+.vx-promo--purple {
+  background: linear-gradient(150deg, rgba(124, 58, 237, 0.4), rgba(12, 30, 53, 0.96) 72%);
+}
+
+.vx-promo--blue {
+  background: linear-gradient(150deg, rgba(37, 99, 235, 0.34), rgba(12, 30, 53, 0.96) 72%);
+}
+
+.vx-promo--gold {
+  background: linear-gradient(150deg, rgba(251, 191, 36, 0.26), rgba(12, 30, 53, 0.96) 72%);
+}
+
+// --- Category feature tiles ------------------------------------------------
+
+.vx-cat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.vx-cat-tile {
+  position: relative;
+  overflow: hidden;
+  min-height: 116px;
+  border-radius: var(--vx-radius-lg);
+  border: 1px solid var(--vx-border);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  transition: transform var(--vx-t-med) var(--vx-ease-out), box-shadow var(--vx-t-med) var(--vx-ease-out),
+    border-color var(--vx-t-med) var(--vx-ease-out);
+
+  i {
+    font-size: 26px;
+    margin-bottom: 4px;
+    filter: drop-shadow(0 6px 14px rgba(3, 10, 22, 0.5));
+  }
+
+  strong {
+    font-size: 15.5px;
+    font-weight: 800;
+  }
+
+  span {
+    font-size: 12.5px;
+    color: var(--vx-text-3);
+  }
+
+  &:hover {
+    transform: translateY(-3px);
+    border-color: var(--vx-border-active);
+    box-shadow: var(--vx-shadow-card-hover);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--vx-border-active);
+    outline-offset: 2px;
+  }
+}
+
+// Per-tile category themes — quiet gradients, one accent family per category.
+.vx-cat-tile--purple {
+  background: linear-gradient(150deg, rgba(124, 58, 237, 0.3), rgba(12, 30, 53, 0.95) 78%);
+
+  i {
+    color: #a78bfa;
+  }
+}
+
+.vx-cat-tile--violet {
+  background: linear-gradient(150deg, rgba(217, 70, 239, 0.26), rgba(12, 30, 53, 0.95) 78%);
+
+  i {
+    color: #f0abfc;
+  }
+}
+
+.vx-cat-tile--teal {
+  background: linear-gradient(150deg, rgba(34, 211, 238, 0.22), rgba(12, 30, 53, 0.95) 78%);
+
+  i {
+    color: #67e8f9;
+  }
+}
+
+.vx-cat-tile--blue {
+  background: linear-gradient(150deg, rgba(37, 99, 235, 0.28), rgba(12, 30, 53, 0.95) 78%);
+
+  i {
+    color: #93c5fd;
+  }
+}
+
+.vx-cat-tile--cyan {
+  background: linear-gradient(150deg, rgba(6, 182, 212, 0.24), rgba(12, 30, 53, 0.95) 78%);
+
+  i {
+    color: #7dd3fc;
+  }
+}
+
+.vx-cat-tile--green {
+  background: linear-gradient(150deg, rgba(34, 197, 94, 0.24), rgba(12, 30, 53, 0.95) 78%);
+
+  i {
+    color: #86efac;
+  }
+}
+
+// --- Community join card (section 6.1 step 10) --------------------------------
+
+.vx-community {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  padding: 26px 28px;
+  border-radius: var(--vx-radius-lg);
+  border: 1px solid rgba(34, 211, 238, 0.28);
+  background:
+    radial-gradient(320px 160px at 12% 0%, rgba(34, 211, 238, 0.12), transparent 70%),
+    radial-gradient(280px 140px at 92% 100%, rgba(217, 70, 239, 0.12), transparent 70%),
+    var(--vx-surface);
+}
+
+.vx-community-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 520px;
+
+  h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+
+  p {
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--vx-text-2);
+  }
+}
+
+.vx-community-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #67e8f9;
+  padding: 5px 12px;
+  border-radius: var(--vx-radius-pill);
+  background: rgba(34, 211, 238, 0.1);
+  border: 1px solid rgba(34, 211, 238, 0.3);
+}
+
+.vx-community-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.vx-community-socials {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.vx-community-social {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--vx-radius-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--vx-surface-soft);
+  border: 1px solid var(--vx-border);
+  color: var(--vx-text-2);
+  transition: color var(--vx-t-fast) var(--vx-ease-out), border-color var(--vx-t-fast) var(--vx-ease-out),
+    transform var(--vx-t-fast) var(--vx-ease-out);
+
+  i {
+    font-size: 16px;
+  }
+
+  &:hover {
+    color: #fff;
+    border-color: rgba(34, 211, 238, 0.55);
+    transform: translateY(-2px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--vx-border-active);
+    outline-offset: 2px;
+  }
+}
+
+// --- Provider tiles ---------------------------------------------------------
+
+.vx-provider-card {
+  border-radius: var(--vx-radius-lg);
+  background: var(--vx-surface);
+  border: 1px solid var(--vx-border);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.vx-provider-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.vx-provider-tile {
+  min-height: 64px;
+  border-radius: var(--vx-radius-md);
+  background: var(--vx-surface-soft);
+  border: 1px solid var(--vx-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 12px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--vx-text-2);
+  transition: color var(--vx-t-fast) var(--vx-ease-out), border-color var(--vx-t-fast) var(--vx-ease-out),
+    background-color var(--vx-t-fast) var(--vx-ease-out);
+
+  &:hover {
+    color: var(--vx-text);
+    border-color: var(--vx-border-active);
+    background: var(--vx-surface-elevated);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--vx-border-active);
+    outline-offset: 2px;
+  }
+}

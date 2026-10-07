@@ -11,12 +11,22 @@ import { useEffect } from 'react';
 import { Providers } from '@/app/providers';
 import { ThemeApplier } from '@/components/portal/ThemeApplier';
 import TemplateSwitcher from '@/components/portal/TemplateSwitcher';
-import { Open_Sans, Orbitron, Playfair_Display } from 'next/font/google';
+import { Open_Sans, Orbitron, Playfair_Display, Plus_Jakarta_Sans } from 'next/font/google';
 
 const openSans = Open_Sans({
   subsets: ['latin'],
   weight: ['300', '400', '600', '700'],
   display: 'swap',
+});
+
+// Vexynix player surface typeface (handoff section 3.2). preload: false — only
+// routes that load the vexynix stylesheet pull the font file down.
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800'],
+  display: 'swap',
+  preload: false,
+  variable: '--font-jakarta',
 });
 
 // Display faces used by the optional visual templates (see lib/lobby-templates).
@@ -64,7 +74,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html
       lang="en"
-      className={`${openSans.className} ${orbitron.variable} ${playfair.variable}`}
+      className={`${openSans.className} ${orbitron.variable} ${playfair.variable} ${plusJakarta.variable}`}
     >
       <head>
         <title>Game Portal</title>
